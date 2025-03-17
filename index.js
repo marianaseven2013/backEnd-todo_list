@@ -4,17 +4,14 @@ var cors = require('cors');
 var path = require('path');
 var mysql = require('mysql2'); //<----------mysql2
 
-// Crear una instancia de la aplicación Express
 var app = express();
 
-// Usar CORS para permitir solicitudes desde el puerto 5500 (o el origen de tu frontend)
 app.use(cors({
   origin: 'http://127.0.0.1:5500', // Aquí puedes ajustar esto al origen de tu frontend
 }));
 
-// Middlewares para la configuración básica de Express
-app.use(express.json()); // Para parsear JSON en las solicitudes
-app.use(express.urlencoded({ extended: false })); // Para parsear formularios
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: false })); 
 
 // Rutas del servidor
 app.get('/', (req, res) => {
@@ -44,7 +41,6 @@ db.connect((err) => {
   console.log('Conexión a la base de datos establecida');
 });
 
-// Ruta para consultar los usuarios desde la base de datos
 app.get('/usuarios', (req, res) => {
   // Realiza una consulta SELECT a la base de datos
   db.query('SELECT * FROM tareas', (err, results) => {
@@ -96,11 +92,10 @@ app.get('/tareas', (req, res) => {
           console.error('Error al consultar tareas: ', err);
           return res.status(500).json({ mensaje: 'Error al consultar tareas' });
       }
-      res.json(results); // Enviar los resultados como JSON
+      res.json(results);
   });
 });
 
-// Ruta para el login
 const jwt = require('jsonwebtoken');
 
 app.post('/login', (req, res) => {
@@ -126,7 +121,7 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/tareas', (req, res) => {
-  console.log("Cuerpo de la solicitud:", req.body); // Depuración
+  console.log("Cuerpo de la solicitud:", req.body); 
   const { nombre_tarea, usuario_id } = req.body;
 
   if (!nombre_tarea || !usuario_id) {
@@ -144,7 +139,7 @@ app.post('/tareas', (req, res) => {
       res.status(201).json({ mensaje: 'Tarea agregada con éxito', id: results.insertId });
   });
 });
-// Configurar el puerto en el que se escucharán las solicitudes
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
